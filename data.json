@@ -1,0 +1,76 @@
+{
+  "polo_industrial_camacari": {
+    "faturamento_impacto_financeiro": {
+      "braskem": {
+        "q1_2022": "R$ 26,7 bilhões",
+        "2023_total": "R$ 70,7 bilhões"
+      },
+      "ford": {
+        "encerramento": "2021",
+        "indenizacao": "R$ 2,14 bilhões"
+      }
+    },
+    "empregos": {
+      "empresas": ">90",
+      "diretos": "10 mil",
+      "indiretos": "30 mil"
+    },
+    "diversidade_racial": {
+      "kordsa": "88% pretos/pardos",
+      "braskem_bahia": "77% pretos/pardos"
+    }
+  },
+  "turismo_servicos": {
+    "hotelaria": {
+      "diaria_3_estrelas": "R$ 295",
+      "diaria_5_estrelas": "R$ 1.808"
+    },
+    "forca_trabalho_bahia": {
+      "pretos_pardos": "81,9%",
+      "informalidade": "maioria absoluta"
+    }
+  },
+  "desigualdade_socioeconomica": {
+    "renda_media_ibge_2022": {
+      "pretos": "R$ 2.061",
+      "pardos": "R$ 2.186",
+      "media_nacional": "R$ 2.851"
+    },
+    "camacari": {
+      "pib_per_capita_2021": "R$ 109.866,84",
+      "cadastro_unico": "128.162 pessoas"
+    },
+    "desemprego_bahia_2024": {
+      "total": "10,8%",
+      "pretos": "10,7%",
+      "pardos": "8,9%",
+      "brancos": "7,3%"
+    }
+  },
+  "dados_geograficos": {
+    "coordenadas_gps": {
+      "latitude": -12.71,
+      "longitude": -38.32
+    },
+    "distribuicao_populacional": {
+      "sede": "~186 mil",
+      "abrantes_orla": "~80 mil",
+      "monte_gordo": "~35 mil"
+    },
+    "pib_2021": {
+      "camacari": "R$ 33,9 bilhões",
+      "posicao_bahia": "2º maior",
+      "receita_municipal": "R$ 1,8 bilhão"
+    }
+  },
+  "outros_indicadores": {
+    "educacao": {
+      "criancas_negras": "vastas maioria rede pública",
+      "problemas": "maiores índices de evasão, menores taxas de escolarização"
+    },
+    "impostos": {
+      "polo_industrial": "60,5% do Valor Agregado Bruto",
+      "tributos": "principal fonte ISS e ICMS"
+    }
+  }
+}
