@@ -355,6 +355,7 @@
 
         let currentYear = 2023;
         let charts = {};
+        let map;
 
         // === INICIALIZAÇÃO ===
         document.addEventListener('DOMContentLoaded', function() {
@@ -362,8 +363,6 @@
             initScrollAnimations();
             initFilters();
             initMap();
-            // Disqus (substitua 'SEU-SHORTNAME' pelo seu Disqus)
-            // loadDisqus();
         });
 
         function initDashboard() {
@@ -451,24 +450,27 @@
             });
         }
 
-        // === FILTROS ===
+        // === FILTROS CORRIGIDOS ===
         function initFilters() {
             const container = document.querySelector('.filter-controls');
             Object.keys(appData.anos).forEach(ano => {
                 const btn = document.createElement('button');
                 btn.className = 'filter-btn';
                 btn.textContent = ano;
-                btn.onclick = () => filterByYear(ano);
+                btn.onclick = function(event) {
+                    filterByYear(ano, this);
+                };
                 if (ano == currentYear) btn.classList.add('active');
                 container.appendChild(btn);
             });
         }
 
-        function filterByYear(year) {
+        function filterByYear(year, button) {
             currentYear = year;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            button.classList.add('active');
             
             const anoData = appData.anos[year];
             if (charts.polo && anoData) {
-               
+                charts.polo.data.datasets[0].data = [anoData.braskem, 2140, 15000];
+                charts.polo.options.plugins.title.text = `
