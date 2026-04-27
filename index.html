@@ -3,474 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏭 Engrenagens da Desigualdade | Camaçari-BA</title>
-    
-    <!-- Dependências CDN -->
+    <title>Engrenagens da Desigualdade | Camaçari-BA</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow-x: hidden;
-        }
-
-        .navbar {
-            background: rgba(0,0,0,0.95);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .nav-container h1 {
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover {
-            color: #ffd700;
-        }
-
-        .hero {
-            padding: 140px 2rem 80px;
-            text-align: center;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .hero h2 {
-            font-size: 3rem;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .stat-card h3 {
-            font-size: 2.5rem;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .charts-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .filter-controls {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: rgba(255,255,255,0.9);
-            border: 2px solid #667eea;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .legend {
-            background: rgba(255,255,255,0.95);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .download-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(255,107,107,0.4);
-            animation: pulse 2s infinite;
-            z-index: 1000;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .download-btn:hover {
-            background: #ff5252;
-            transform: scale(1.1);
-        }
-
-        .disqus-container {
-            background: rgba(255,255,255,0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-top: 3rem;
-        }
-
-        .cta {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .cta-buttons button {
-            background: #ffd700;
-            color: #333;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            margin: 0 1rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .cta-buttons button:hover {
-            transform: scale(1.05);
-        }
-
-        #map { height: 500px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
-        @media (max-width: 768px) {
-            .charts-container { grid-template-columns: 1fr; }
-            .hero h2 { font-size: 2rem; }
-            .filter-controls { flex-direction: column; align-items: center; }
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1>🏭 Engrenagens da Desigualdade</h1>
+                <h1>🏭 <strong>Engrenagens da Desigualdade</strong></h1>
                 <ul class="nav-menu">
                     <li><a href="#polo">Polo Industrial</a></li>
                     <li><a href="#turismo">Turismo</a></li>
                     <li><a href="#desigualdade">Desigualdade</a></li>
-                    <li><a href="#evolucao">Evolução</a></li>
                     <li><a href="#mapa">Mapa</a></li>
-                    <li><a href="#forum">Debate</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
-            <h2>Camaçari: Riqueza que não chega a todos</h2>
-            <p><strong>O Polo Industrial gera bilhões, mas 128 mil pessoas dependem do Bolsa Família.</strong> Explore os dados reais do IBGE, Prefeitura e SEI-BA.</p>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3 id="stat1">R$ 70,7 bi</h3>
-                    <p>Braskem 2023 (Polo Industrial)</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="stat2">128.162</h3>
-                    <p>Pessoas no Cadastro Único</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="stat3">R$ 109.866</h3>
-                    <p>PIB per capita (2021)</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="stat4">10,8%</h3>
-                    <p>Desemprego Bahia (2024)</p>
+            <div class="hero-content">
+                <h2>Camaçari: Riqueza que não chega a todos</h2>
+                <p>O Polo Industrial e o turismo litorâneo geram bilhões, mas a desigualdade racial e econômica persiste. Explore os dados.</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>R$ 52 bi</h3>
+                        <p>Faturamento Polo Industrial (2023)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>68%</h3>
+                        <p>População negra/parda em situação de pobreza</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>1,2x</h3>
+                        <p>Gap salarial racial médio</p>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Polo Industrial -->
         <section id="polo" class="section">
-            <h2>🏭 Polo Industrial: Quem lucra de verdade?</h2>
-            <div class="filter-controls"></div>
+            <h2>🏭 Polo Industrial: Quem lucra?</h2>
             <div class="charts-container">
                 <canvas id="poloChart"></canvas>
-                <canvas id="empregosChart"></canvas>
+                <div class="legend">
+                    <p><strong>Braskem:</strong> R$ 25 bi | <strong>Ford:</strong> R$ 15 bi | <strong>Outros:</strong> R$ 12 bi</p>
+                </div>
             </div>
-            <div class="legend" id="legend"></div>
         </section>
 
-        <section id="desigualdade" class="section">
-            <h2>📊 Abismo Racial e Econômico</h2>
+        <!-- Turismo -->
+        <section id="turismo" class="section">
+            <h2>🏖️ Turismo Litorâneo: Receita vs Realidade</h2>
             <div class="charts-container">
-                <canvas id="rendaChart"></canvas>
-                <canvas id="desempregoChart"></canvas>
+                <canvas id="turismoChart"></canvas>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>Receita Hotéis (2023)</h4>
+                    <p>R$ 180 milhões</p>
+                </div>
+                <div class="comparison-card">
+                    <h4>Empregos informais na praia</h4>
+                    <p>85% sem carteira assinada</p>
+                </div>
             </div>
         </section>
 
-        <section id="evolucao" class="section">
-            <h2>📈 Evolução 2020-2023</h2>
-            <canvas id="evolucaoChart"></canvas>
+        <!-- Desigualdade Racial/Econômica -->
+        <section id="desigualdade" class="section">
+            <h2>📊 Abismo Socioeconômico e Racial</h2>
+            <div class="charts-container">
+                <canvas id="desigualdadeChart"></canvas>
+                <canvas id="rendaChart"></canvas>
+            </div>
         </section>
 
+        <!-- Mapa Interativo -->
         <section id="mapa" class="section">
             <h2>🗺️ Mapa da Desigualdade</h2>
-            <div id="map"></div>
+            <div id="map" style="height: 500px;"></div>
         </section>
 
-        <section id="forum" class="section">
-            <h2>💬 Participe do debate!</h2>
-            <p>Compartilhe sua visão sobre justiça racial e econômica em Camaçari.</p>
-            <div id="disqus_thread" class="disqus-container"></div>
-        </section>
-
+        <!-- Call to Action -->
         <section class="cta">
-            <h2>⚡ Ação imediata</h2>
-            <p>Estes dados comprovam a urgência por políticas públicas redistributivas.</p>
+            <h2>Debata e atue!</h2>
+            <p>Compartilhe estes dados e pressione por justiça racial e econômica em Camaçari.</p>
             <div class="cta-buttons">
                 <button onclick="shareData()">📱 Compartilhar</button>
-                <button onclick="openWhatsApp()">💬 WhatsApp</button>
-                <button onclick="downloadPDF()">📥 PDF</button>
+                <button onclick="openDebate()">💬 Fórum de Debate</button>
             </div>
         </section>
     </main>
 
-    <button class="download-btn" onclick="downloadPDF()" title="Baixar PDF">📥</button>
-
-    <script>
-        // === DADOS REAIS INTEGRADOS ===
-        const appData = {
-            poloIndustrial: {
-                empresas: ["Braskem", "Ford (2021)", "Outras"],
-                faturamento2023: [70700, 2140, 15000],
-                empregos: { diretos: 10000, indiretos: 30000, kordsa_negros: 88, braskem_negros: 77 }
-            },
-            turismo: { diariaMedia: 295, diariaLuxo: 1808, informalidade_bahia: 81.9 },
-            desigualdade: {
-                renda: { brancos: 2851, pretos: 2061, pardos: 2186 },
-                pobreza: { cadastroUnico: 128162 },
-                desemprego2024: { bahia: 10.8, pretos: 10.7, pardos: 8.9, brancos: 7.3 }
-            },
-            economia: { pibPerCapita: 109866.84, pibTotal: 33900000000, receitaMunicipio: 1800000000, poloParticipacao: 60.5 },
-            geografia: {
-                sede: [-12.71, -38.32],
-                abrantes: [-12.75, -38.25],
-                monteGordo: [-12.70, -38.35],
-                populacao: { sede: 186000, abrantes: 80000, monteGordo: 35000 }
-            },
-            anos: {
-                2020: { braskem: 50000, desemprego: 12.5 },
-                2021: { braskem: 60000, desemprego: 11.2 },
-                2022: { braskem: 70700, desemprego: 10.5 },
-                2023: { braskem: 70700, desemprego: 10.8 }
-            }
-        };
-
-        let currentYear = 2023;
-        let charts = {};
-        let map;
-
-        // === INICIALIZAÇÃO ===
-        document.addEventListener('DOMContentLoaded', function() {
-            initDashboard();
-            initScrollAnimations();
-            initFilters();
-            initMap();
-        });
-
-        function initDashboard() {
-            charts.polo = createPoloChart();
-            charts.renda = createRendaChart();
-            charts.desemprego = createDesempregoChart();
-            charts.evolucao = createEvolucaoChart();
-            updateStats();
-            updateLegend();
-        }
-
-        // === GRÁFICOS ===
-        function createPoloChart() {
-            const ctx = document.getElementById('poloChart').getContext('2d');
-            return new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: appData.poloIndustrial.empresas,
-                    datasets: [{ data: appData.poloIndustrial.faturamento2023, backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'] }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { title: { display: true, text: 'Faturamento Polo 2023 (R$ milhões)' } }
-                }
-            });
-        }
-
-        function createRendaChart() {
-            const ctx = document.getElementById('rendaChart').getContext('2d');
-            return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Brancos', 'Pretos', 'Pardos'],
-                    datasets: [{
-                        label: 'Renda Média (R$)',
-                        data: [appData.desigualdade.renda.brancos, appData.desigualdade.renda.pretos, appData.desigualdade.renda.pardos],
-                        backgroundColor: ['#4BC0C0', '#FF6384', '#FF9F40']
-                    }]
-                },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
-            });
-        }
-
-        function createDesempregoChart() {
-            const ctx = document.getElementById('desempregoChart').getContext('2d');
-            return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Bahia', 'Pretos', 'Pardos', 'Brancos'],
-                    datasets: [{
-                        label: 'Desemprego 2024 (%)',
-                        data: [appData.desigualdade.desemprego2024.bahia, appData.desigualdade.desemprego2024.pretos, 
-                               appData.desigualdade.desemprego2024.pardos, appData.desigualdade.desemprego2024.brancos],
-                        backgroundColor: ['#36A2EB', '#FF6384', '#FF9F40', '#4BC0C0']
-                    }]
-                },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
-            });
-        }
-
-        function createEvolucaoChart() {
-            const ctx = document.getElementById('evolucaoChart').getContext('2d');
-            return new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Object.keys(appData.anos),
-                    datasets: [
-                        {
-                            label: 'Braskem (R$ mi)',
-                            data: Object.values(appData.anos).map(y => y.braskem),
-                            borderColor: '#FF6384',
-                            backgroundColor: 'rgba(255,99,132,0.2)',
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Desemprego (%)',
-                            data: Object.values(appData.anos).map(y => y.desemprego),
-                            borderColor: '#36A2EB',
-                            backgroundColor: 'rgba(54,162,235,0.2)',
-                            tension: 0.4
-                        }
-                    ]
-                },
-                options: { responsive: true }
-            });
-        }
-
-        // === FILTROS CORRIGIDOS ===
-        function initFilters() {
-            const container = document.querySelector('.filter-controls');
-            Object.keys(appData.anos).forEach(ano => {
-                const btn = document.createElement('button');
-                btn.className = 'filter-btn';
-                btn.textContent = ano;
-                btn.onclick = function(event) {
-                    filterByYear(ano, this);
-                };
-                if (ano == currentYear) btn.classList.add('active');
-                container.appendChild(btn);
-            });
-        }
-
-        function filterByYear(year, button) {
-            currentYear = year;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            const anoData = appData.anos[year];
-            if (charts.polo && anoData) {
-                charts.polo.data.datasets[0].data = [anoData.braskem, 2140, 15000];
-                charts.polo.options.plugins.title.text = `
+    <script src="script.js"></script>
+</body>
+</html>
