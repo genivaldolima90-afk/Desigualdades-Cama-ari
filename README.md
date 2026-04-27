@@ -1,1 +1,0 @@
-# Desigualdades-Cama-ari
